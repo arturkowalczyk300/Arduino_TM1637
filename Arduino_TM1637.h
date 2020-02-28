@@ -5,7 +5,17 @@
 
 class Arduino_TM1637
 {
+private:
+    int CLK;
+    int DIO;
+
 public:
+    Arduino_TM1637(int CLK, int DIO)
+    {
+        this->CLK = CLK;
+        this->DIO = DIO;
+    }
+
     void writeByte(byte byteToSend);
     void startCondition();
     void stopCondition();
