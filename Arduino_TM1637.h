@@ -20,7 +20,7 @@ public:
         pinMode(this->DIO, INPUT);
     }
 
-    void writeByte(byte byteToSend);
+    bool writeByte(byte byteToSend); //returns ACK ; true -> valid ACK received
     void startCondition();
     void stopCondition();
     void setBrightness(byte brightness);
