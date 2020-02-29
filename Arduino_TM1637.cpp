@@ -49,6 +49,8 @@ bool Arduino_TM1637::writeByte(byte byteToSend)
     pinMode(CLK, INPUT);
     delayMicroseconds(_delayUs);
 
+    if (ACK)
+        Serial.println("ACK");
     return ACK;
 }
 
@@ -62,10 +64,17 @@ void Arduino_TM1637::setSegments(byte segment1, byte segment2, byte segment3, by
 
 void Arduino_TM1637::displayNumber(int number)
 {
+
     startCondition();
-    if (writeByte(0b01000000)) //write data to display register command
-    {
-        Serial.println("otrzymano ACK");
-    }
+    writeByte(0b01000000); //write data to display register command
+    stopCondition();
+
+    startCondition();
+    writeByte(0b01000011); //write to first segment address
+    writeByte(0x00);       //turn on all segments;
+    stopCondition();
+
+    startCondition();
+    writeByte(0b10000011); //set maximum brightness
     stopCondition();
 }
