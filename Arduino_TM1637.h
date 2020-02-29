@@ -8,12 +8,16 @@ class Arduino_TM1637
 private:
     int CLK;
     int DIO;
+    const int _delayUs = 100;
 
 public:
     Arduino_TM1637(int CLK, int DIO)
     {
         this->CLK = CLK;
         this->DIO = DIO;
+
+        pinMode(this->CLK, INPUT); //line stays in HIGH state because of pull-up resistors
+        pinMode(this->DIO, INPUT);
     }
 
     void writeByte(byte byteToSend);
