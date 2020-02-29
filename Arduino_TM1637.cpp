@@ -62,4 +62,10 @@ void Arduino_TM1637::setSegments(byte segment1, byte segment2, byte segment3, by
 
 void Arduino_TM1637::displayNumber(int number)
 {
+    startCondition();
+    if (writeByte(0b01000000)) //write data to display register command
+    {
+        Serial.println("otrzymano ACK");
+    }
+    stopCondition();
 }
