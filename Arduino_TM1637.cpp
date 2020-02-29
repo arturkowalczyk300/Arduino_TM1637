@@ -70,11 +70,15 @@ void Arduino_TM1637::displayNumber(int number)
     stopCondition();
 
     startCondition();
-    writeByte(0b01000011); //write to first segment address
-    writeByte(0x00);       //turn on all segments;
+    writeByte(0b11000000); //write to first segment address
+    writeByte(0xFF);       //turn on all segments;
+    writeByte(0xFF);       //turn on all segments;
+    writeByte(0xFF);       //turn on all segments;
+    writeByte(0xFF);       //turn on all segments;
+
     stopCondition();
 
     startCondition();
-    writeByte(0b10000011); //set maximum brightness
+    writeByte(0b10001111); //set maximum brightness
     stopCondition();
 }
