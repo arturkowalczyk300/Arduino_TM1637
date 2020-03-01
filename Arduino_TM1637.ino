@@ -16,6 +16,6 @@ void loop() {
   // put your main code here, to run repeatedly:
   tm1637.displayNumber(currentValue++);
   if(currentValue>endValue) currentValue=0;
-  delay(20);
+  delay(20 );
   
 }

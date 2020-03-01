@@ -59,26 +59,42 @@ void Arduino_TM1637::setSegments(byte segment1, byte segment2, byte segment3, by
 void Arduino_TM1637::displayNumber(int number)
 {
 
-    int units = 1;
-    int tens = 2;
-    int hundreds = 0;
-    int thousands = 2;
+    int units, tens, hundreds, thousands;
+    int usedDigits = number / 10.0;
 
     thousands = number / 1000.0;
     hundreds = (number - thousands * 1000) / 100.0;
     tens = (number - thousands * 1000 - hundreds * 100) / 10.0;
     units = number - thousands * 1000 - hundreds * 100 - tens * 10;
 
+    if (thousands > 0)
+        usedDigits = 4;
+    else if (hundreds > 0)
+        usedDigits = 3;
+    else if (tens > 0)
+        usedDigits = 2;
+    else
+        usedDigits = 1;
+
     startCondition();
     writeByte(0b01000000); //write data to display register command
     stopCondition();
 
     startCondition();
-    writeByte(0b11000000);                //write to first segment address
-    writeByte(characterArray[thousands]); //turn on all segments;
-    writeByte(characterArray[hundreds]);  //turn on all segments;
-    writeByte(characterArray[tens]);      //turn on all segments;
-    writeByte(characterArray[units]);     //turn on all segments;
+    writeByte(0b11000000); //write to first segment address
+    if (usedDigits == 4)
+        writeByte(characterArray[thousands]); //turn on all segments;
+    else
+        writeByte(0x00);
+    if (usedDigits >= 3)
+        writeByte(characterArray[hundreds]); //turn on all segments;
+    else
+        writeByte(0x00);
+    if (usedDigits >= 2)
+        writeByte(characterArray[tens]); //turn on all segments;
+    else
+        writeByte(0x00);
+    writeByte(characterArray[units]); //turn on all segments;
 
     stopCondition();
 
