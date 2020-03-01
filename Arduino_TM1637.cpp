@@ -52,8 +52,33 @@ void Arduino_TM1637::setBrightness(byte brightness)
 {
 }
 
-void Arduino_TM1637::setSegments(byte segment1, byte segment2, byte segment3, byte segment4)
+void Arduino_TM1637::setSegments(int usedDigits, byte digit1, byte digit2, byte digit3, byte digit4, bool showColon)
 {
+    startCondition();
+    writeByte(0b01000000); //write data to display register command
+    stopCondition();
+
+    startCondition();
+    writeByte(0b11000000); //write to first segment address
+    if (usedDigits == 4)
+        writeByte(digit1);
+    else
+        writeByte(0x00);
+    if (usedDigits >= 3)
+        writeByte(digit2 | (showColon ? 0x80 : 0x00));
+    else
+        writeByte(0x00 | (showColon ? 0x80 : 0x00));
+    if (usedDigits >= 2)
+        writeByte(digit3);
+    else
+        writeByte(0x00);
+    writeByte(digit4);
+
+    stopCondition();
+
+    startCondition();
+    writeByte(0b10001111); //set maximum brightness
+    stopCondition();
 }
 
 void Arduino_TM1637::displayNumber(int number, bool showColon)
@@ -76,29 +101,10 @@ void Arduino_TM1637::displayNumber(int number, bool showColon)
     else
         usedDigits = 1;
 
-    startCondition();
-    writeByte(0b01000000); //write data to display register command
-    stopCondition();
+    setSegments(usedDigits, characterArray[thousands], characterArray[hundreds], characterArray[tens], characterArray[units], showColon);
+}
 
-    startCondition();
-    writeByte(0b11000000); //write to first segment address
-    if (usedDigits == 4)
-        writeByte(characterArray[thousands]); //turn on all segments;
-    else
-        writeByte(0x00);
-    if (usedDigits >= 3)
-        writeByte(characterArray[hundreds] | (showColon ? 0x80 : 0x00)); //turn on all segments;
-    else
-        writeByte(0x00 | (showColon ? 0x80 : 0x00));
-    if (usedDigits >= 2)
-        writeByte(characterArray[tens]); //turn on all segments;
-    else
-        writeByte(0x00);
-    writeByte(characterArray[units]); //turn on all segments;
-
-    stopCondition();
-
-    startCondition();
-    writeByte(0b10001111); //set maximum brightness
-    stopCondition();
+void Arduino_TM1637::displayDigits(byte digit1, byte digit2, byte digit3, byte digit4, bool showColon)
+{
+    setSegments(4, characterArray[digit1], characterArray[digit2], characterArray[digit3], characterArray[digit4], showColon);
 }

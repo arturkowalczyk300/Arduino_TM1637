@@ -7,8 +7,8 @@ void setup() {
   // put your setup code here, to run once:
   tm1637.setBrightness(255);
   delay(1000);
-  tm1637.displayNumber(8888, false);
-  delay(1000);
+  tm1637.displayDigits(1, 3, 5, 7, false);
+  delay(2000);
 }
 int currentValue=0;
 int endValue=1500;

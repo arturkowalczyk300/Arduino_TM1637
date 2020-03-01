@@ -26,8 +26,8 @@ public:
     void startCondition();
     void stopCondition();
     void setBrightness(byte brightness);
-
-    void setSegments(byte segment1, byte segment2, byte segment3, byte segment4);
+    void setSegments(int usedDigits, byte digit1, byte digit2, byte digit3, byte digit4, bool showColon);
     void displayNumber(int number, bool showColon);
+    void displayDigits(byte digit1, byte digit2, byte digit3, byte digit4, bool showColon);
 };
 #endif
