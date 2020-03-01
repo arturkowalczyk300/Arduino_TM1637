@@ -10,11 +10,12 @@ void setup() {
   tm1637.displayNumber(8888);
   delay(1000);
 }
-
+int currentValue=0;
+int endValue=1500;
 void loop() {
   // put your main code here, to run repeatedly:
-  tm1637.displayNumber(1234);
-  delay(1000);
-  tm1637.displayNumber(4321);
-  delay(1000);
+  tm1637.displayNumber(currentValue++);
+  if(currentValue>endValue) currentValue=0;
+  delay(20);
+  
 }
