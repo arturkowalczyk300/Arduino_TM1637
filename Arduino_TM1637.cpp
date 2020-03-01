@@ -19,11 +19,11 @@ void Arduino_TM1637::stopCondition()
 bool Arduino_TM1637::writeByte(byte byteToSend)
 {
     byte _byte = byteToSend;
-    pinMode(CLK, OUTPUT);
-    delayMicroseconds(_delayUs);
+
     for (int i = 0; i < 8; i++)
     {
-
+        pinMode(CLK, OUTPUT);
+        delayMicroseconds(_delayUs);
         if (_byte & 0b00000001)
         {
             pinMode(DIO, INPUT);
@@ -34,23 +34,17 @@ bool Arduino_TM1637::writeByte(byte byteToSend)
         delayMicroseconds(_delayUs);
         pinMode(CLK, INPUT);
         delayMicroseconds(_delayUs);
-        pinMode(CLK, OUTPUT);
-        delayMicroseconds(_delayUs);
-
         _byte >>= 1;
     }
-    pinMode(DIO, INPUT);
-    delayMicroseconds(_delayUs);
 
     //wait for ACK -> when CLK is lowed
     pinMode(CLK, OUTPUT);
+    pinMode(DIO, INPUT);
     delayMicroseconds(_delayUs);
     pinMode(CLK, INPUT);
     delayMicroseconds(_delayUs);
     bool ACK = !digitalRead(DIO); //LOW state -> ACK received
-
-    delayMicroseconds(_delayUs);
-    pinMode(CLK, INPUT);
+    pinMode(CLK, OUTPUT);
     delayMicroseconds(_delayUs);
 }
 
@@ -75,7 +69,6 @@ void Arduino_TM1637::displayNumber(int number)
     writeByte(0xFF);       //turn on all segments;
     writeByte(0xFF);       //turn on all segments;
     writeByte(0xFF);       //turn on all segments;
-
     stopCondition();
 
     startCondition();
