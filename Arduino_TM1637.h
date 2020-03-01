@@ -28,6 +28,6 @@ public:
     void setBrightness(byte brightness);
 
     void setSegments(byte segment1, byte segment2, byte segment3, byte segment4);
-    void displayNumber(int number);
+    void displayNumber(int number, bool showColon);
 };
 #endif

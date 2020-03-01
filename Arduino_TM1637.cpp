@@ -56,7 +56,7 @@ void Arduino_TM1637::setSegments(byte segment1, byte segment2, byte segment3, by
 {
 }
 
-void Arduino_TM1637::displayNumber(int number)
+void Arduino_TM1637::displayNumber(int number, bool showColon)
 {
 
     int units, tens, hundreds, thousands;
@@ -87,9 +87,9 @@ void Arduino_TM1637::displayNumber(int number)
     else
         writeByte(0x00);
     if (usedDigits >= 3)
-        writeByte(characterArray[hundreds]); //turn on all segments;
+        writeByte(characterArray[hundreds] | (showColon ? 0x80 : 0x00)); //turn on all segments;
     else
-        writeByte(0x00);
+        writeByte(0x00 | (showColon ? 0x80 : 0x00));
     if (usedDigits >= 2)
         writeByte(characterArray[tens]); //turn on all segments;
     else
